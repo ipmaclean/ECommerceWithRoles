@@ -1,0 +1,151 @@
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - eCommerce</title>
+    <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+    <link href="~/Content/fontawesome-css/fontawesome-all.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="user-menu">
+                        <ul>
+                            <li><a href="@Url.Action("Basket", "Home")"><i class="fas fa-shopping-cart"></i> My Basket</a></li>
+                            @if (Request.IsAuthenticated)
+                            {
+                                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <li><a href="@Url.Action("Index", "Manage")" title="Manage"><i class="fas fa-user"></i> My Account</a></li>
+                                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fas fa-sign-out-alt"></i> Log off</a></li>
+                                }
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action("Register", "Account")" id="registerLink"><i class="fas fa-user"></i> Register</a></li>
+                                <li><a href="@Url.Action("Login", "Account")" id="loginLink"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
+                                using (Html.BeginForm("LoginWithTestAccount", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <li><input id="loginWithTestAccountLink" class="nav-link" type="submit" value="Log in as an admin user"/></li>
+                                }
+                            }
+                            @if (Html.Action("IsAdminUser", "Home").ToString() == "true")
+                            {
+                                <li><a href="@Url.Action("Index", "Product")"><i class="fas fa-edit"></i> Edit Products</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="header-right">
+                        <ul class="list-unstyled list-inline">
+                            <li class="dropdown dropdown-small">
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Currency: </span><span class="value">£ GBP </span><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">£ GBP</a></li>
+                                    <li><a href="#">€ EUR</a></li>
+                                    <li><a href="#">$ USD</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown dropdown-small">
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Language: </span><span class="value">English </span><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">Welsh</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">German</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End header area -->
+
+    <div class="site-branding-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="logo">
+                        <h1><a href="@Url.Action("Index", "Home")"><img src="~/Content/images/logo.png"></a></h1>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div id="shopping-basket-partial">
+                        @Html.Action("_ShoppingBasketPartial", "Home")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End site branding area -->
+
+    <nav class="mainmenu-area">
+        <div class="container">
+            <div class="row">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Home" ? "active" : "")">@Html.ActionLink("Home", "Index", "Home", null, new { })</li>
+                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "AllProducts" ? "active" : "")">@Html.ActionLink("Our Products", "AllProducts", "Home", null, new { })</li>
+                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Basket" ? "active" : "")">@Html.ActionLink("Basket", "Basket", "Home", null, new { })</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav> <!-- End mainmenu area -->
+
+    @RenderBody()
+
+    <footer class="footer-bottom-area">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <div class="col-md-8">
+                        <div class="copyright">
+                            <p>&copy; @DateTime.Now.Year Iain Maclean</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="footer-card-icon">
+                            <i class="fab fa-cc-discover"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-paypal"></i>
+                            <i class="fab fa-cc-visa"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer> <!-- End footer bottom area -->
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

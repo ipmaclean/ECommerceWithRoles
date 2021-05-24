@@ -1,0 +1,22 @@
+﻿@model ECommerceWithRoles.Models.Product
+
+<div class="single-shop-product">
+    <div class="product-upper">
+        <img src="~/Content/images/@Model.Image" alt="">
+    </div>
+    <h2>@Html.ActionLink(Model.Name, "SingleProduct", new { Id = Model.ProductId })</h2>
+    <div class="product-carousel-price">
+        <span>£@Model.GetFormattedPrice()</span>
+    </div>
+
+    <div class="product-option-shop">
+        @using (Ajax.BeginForm("AddToCart", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "shopping-basket-partial", InsertionMode = InsertionMode.Replace, OnSuccess = "bounceCart" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ProductId)
+            <input type="submit" value="Add to basket" class="add_to_cart_button" />
+        }
+
+
+    </div>
+</div>

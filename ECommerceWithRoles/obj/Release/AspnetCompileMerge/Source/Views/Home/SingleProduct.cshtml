@@ -1,0 +1,97 @@
+﻿@model ECommerceWithRoles.Models.Product
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>Shop</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="product-content-right">
+                <div class="product-breadcrumb">
+                    @Html.ActionLink("Home", "Index", "Home", null, new { })
+                    @Html.ActionLink(Model.Department.Name, "AllProducts", new { filter = Model.Department.DepartmentId})
+                    <a href="">@Model.Name</a>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="product-images">
+                            <div class="product-main-img">
+                                <img src="~/Content/images/@Model.Image" alt="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="product-inner">
+                            <h2 class="product-name">@Model.Name</h2>
+                            <div class="product-inner-price">
+                                <span>£@Model.GetFormattedPrice()</span>
+                            </div>
+
+                            @using (Ajax.BeginForm("AddToCart", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "shopping-basket-partial", InsertionMode = InsertionMode.Replace, OnSuccess = "bounceCart" }, new { @class = "cart" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(m => m.ProductId)
+                                <div class="quantity">
+                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
+                                </div>
+                                <input type="submit" value="Add to basket" class="add_to_cart_button" />
+                            }
+
+                            <div class="product-inner-category">
+                                <p>
+                                    Category: @Html.ActionLink(Model.Department.Name, "AllProducts", new { filter = Model.Department.DepartmentId }).
+                                    Tags: @if (ViewBag.LastTag != "null")
+                                    {
+                                        foreach (var tag in Model.Tags)
+                                        {
+                                            if (!tag.Description.Equals(ViewBag.LastTag))
+                                            {
+                                    <span>@Html.ActionLink(tag.Description, "AllProducts", new { filter = tag.TagId }), </span>
+                                                
+                                            }
+                                            else
+                                            {
+                                <span>@Html.ActionLink(tag.Description, "AllProducts", new { filter = tag.TagId })</span>
+                                            }
+                                        }
+                                    }
+                                </p>
+                            </div>
+
+                            <div role="tabpanel">
+                                <ul class="product-tab" role="tablist">
+                                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Description</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                        <h2>Product Description</h2>
+                                        <p>@Model.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

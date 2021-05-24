@@ -1,0 +1,5 @@
+﻿@model ECommerceWithRoles.Models.ShoppingBasket
+
+<div class="shopping-item">
+    <a href="@Url.Action("Basket", "Home")" id="basket-shared-view">Basket- <span class="cart-amount">@(User.Identity.IsAuthenticated ? "£" + Model.GetFormattedBasketPrice() :"Log in to see your basket")</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">@(User.Identity.IsAuthenticated ? Model.GetNumberOfItemsInCart() : "0")</span></a>
+</div>

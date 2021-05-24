@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ECommerceWithRoles.Models.Product>
+
+@{
+    ViewBag.Title = "All Products";
+}
+
+<div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>Shop</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p id="filter-message">@ViewBag.FilterText</p>
+
+
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+
+            @foreach (var product in Model)
+            {
+            <div class="col-md-3 col-sm-6 product-wrapper">
+                @Html.Partial("_SingleProductPartial", product)
+            </div>
+            }
+        </div>
+    </div>
+</div>
+

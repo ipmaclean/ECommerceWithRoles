@@ -1,0 +1,41 @@
+﻿@model ECommerceWithRoles.Models.ShoppingBasketItem
+
+<tr class="cart_item">
+    <td class="product-remove">
+        @using (Html.BeginForm("DeleteShoppingBasketItem", "Home"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ShoppingBasketItemId)
+            @Html.HiddenFor(m => m.ShoppingBasket.ShoppingBasketId)
+            <input type="submit" title="Remove this item" value="x" class="remove"/>
+        }
+    </td>
+
+    <td class="product-thumbnail">
+        <a href="@Url.Action("SingleProduct", "Home", new { Id = Model.Product.ProductId })"><img style="max-width:145px; height:auto;" alt="@Model.Product.Name" class="shop_thumbnail" src="~/Content/images/@Model.Product.Image"></a>
+    </td>
+
+    <td class="product-name">
+        <a href="@Url.Action("SingleProduct", "Home", new { Id = Model.Product.ProductId })">@Model.Product.Name</a>
+    </td>
+
+    <td class="product-price">
+        <span class="amount">£@Model.Product.GetFormattedPrice()</span>
+    </td>
+
+    <td class="product-quantity">
+        <div class="quantity buttons_added">
+            @using (Html.BeginForm("Basket", "Home"))
+            {
+                @Html.TextBoxFor(m => m.ProductAmount, new { type="number", min = "1" })
+                @Html.HiddenFor(m => m.ShoppingBasketItemId)
+                @Html.HiddenFor(m => m.ShoppingBasket.ShoppingBasketId)
+                <input type="submit" value="Update Item" name="update_item" class="button">
+            }
+        </div>
+    </td>
+
+    <td class="product-subtotal">
+        <span class="amount">£@Model.GetFormattedBasketItemPrice()</span>
+    </td>
+</tr>
